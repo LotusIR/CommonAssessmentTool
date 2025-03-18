@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Pylint
         run: |
-          pylint --recursive=y ./app
+          pylint --fail-under=7.0 --recursive=y ./app
 
       - name: Print Success Message
         run: |
