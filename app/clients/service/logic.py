@@ -24,11 +24,14 @@ COLUMN_INTERVENTIONS = [
     "Enhanced Referrals for Skills Development",
 ]
 
-# Load model
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(CURRENT_DIR, "model.pkl")
-with open(MODEL_PATH, "rb") as model_file:
-    MODEL = pickle.load(model_file)
+
+# Load model
+def load_model(model_name):
+    model_path = os.path.join(CURRENT_DIR, 'models', model_name + '.pkl')
+    with open(model_path, "rb") as model_file:
+        model = pickle.load(model_file)
+    return model
 
 
 def clean_input_data(input_data):
@@ -209,21 +212,23 @@ def process_results(baseline_pred, results_matrix):
     return {"baseline": baseline_pred[-1], "interventions": result_list}
 
 
-def interpret_and_calculate(input_data):
+def interpret_and_calculate(input_data, model_name = 'RandomForest'):
     """
     Main function to process input data and generate intervention recommendations.
 
     Args:
         input_data (dict): Raw input data from client
+        model_name (string): name of the model
 
     Returns:
         dict: Processed results with recommendations
     """
+    model = load_model(model_name)
     raw_data = clean_input_data(input_data)
     baseline_row = get_baseline_row(raw_data).reshape(1, -1)
     intervention_rows = create_matrix(raw_data)
-    baseline_prediction = MODEL.predict(baseline_row)
-    intervention_predictions = MODEL.predict(intervention_rows).reshape(-1, 1)
+    baseline_prediction = model.predict(baseline_row)
+    intervention_predictions = model.predict(intervention_rows).reshape(-1, 1)
     result_matrix = np.concatenate(
         (intervention_rows, intervention_predictions), axis=1
     )
@@ -260,5 +265,12 @@ if __name__ == "__main__":
         "time_unemployed": "1",
         "need_mental_health_support_bool": "1",
     }
+    print('result for Random Forest model')
     results = interpret_and_calculate(test_data)
+    print(results)
+    print('result for Gradient Boosting model')
+    results = interpret_and_calculate(test_data, 'GradientBoosting')
+    print(results)
+    print('result for Support Vector model')
+    results = interpret_and_calculate(test_data, 'SupportVector')
     print(results)
