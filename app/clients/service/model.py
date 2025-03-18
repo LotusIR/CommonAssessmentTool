@@ -12,6 +12,14 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
+# List of available ML models
+#Test: http://localhost:8000/clients/service/model
+AVAILABLE_MODELS = [
+    "RandomForest",
+    "TBD01",
+    "TBD02"
+]
+
 def prepare_models():
     """
     Prepare and train the Random Forest model using the dataset.
