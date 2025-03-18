@@ -9,16 +9,19 @@ from typing import Optional, List
 from enum import IntEnum
 from app.models import UserRole
 
+
 # Enums for validation
 class Gender(IntEnum):
     MALE = 1
     FEMALE = 2
+
 
 class PredictionInput(BaseModel):
     """
     Schema for prediction input data containing all client assessment fields.
     Used for making predictions about client outcomes.
     """
+
     age: int
     gender: str
     work_experience: int
@@ -44,6 +47,7 @@ class PredictionInput(BaseModel):
     time_unemployed: int
     need_mental_health_support_bool: str
 
+
 class ClientBase(BaseModel):
     age: int = Field(ge=18, description="Age of client, must be 18 or older")
     gender: Gender = Field(description="Gender: 1 for male, 2 for female")
@@ -54,9 +58,15 @@ class ClientBase(BaseModel):
     citizen_status: bool = Field(description="Client's citizenship status")
     level_of_schooling: int = Field(ge=1, le=14, description="Education level (1-14)")
     fluent_english: bool = Field(description="English fluency status")
-    reading_english_scale: int = Field(ge=0, le=10, description="English reading level (0-10)")
-    speaking_english_scale: int = Field(ge=0, le=10, description="English speaking level (0-10)")
-    writing_english_scale: int = Field(ge=0, le=10, description="English writing level (0-10)")
+    reading_english_scale: int = Field(
+        ge=0, le=10, description="English reading level (0-10)"
+    )
+    speaking_english_scale: int = Field(
+        ge=0, le=10, description="English speaking level (0-10)"
+    )
+    writing_english_scale: int = Field(
+        ge=0, le=10, description="English writing level (0-10)"
+    )
     numeracy_scale: int = Field(ge=0, le=10, description="Numeracy skill level (0-10)")
     computer_scale: int = Field(ge=0, le=10, description="Computer skill level (0-10)")
     transportation_bool: bool = Field(description="Has transportation")
@@ -68,7 +78,9 @@ class ClientBase(BaseModel):
     currently_employed: bool = Field(description="Current employment status")
     substance_use: bool = Field(description="Substance use status")
     time_unemployed: int = Field(ge=0, description="Time unemployed in months")
-    need_mental_health_support_bool: bool = Field(description="Needs mental health support")
+    need_mental_health_support_bool: bool = Field(
+        description="Needs mental health support"
+    )
 
     class Config:
         json_schema_extra = {
@@ -96,15 +108,17 @@ class ClientBase(BaseModel):
                 "currently_employed": False,
                 "substance_use": False,
                 "time_unemployed": 6,
-                "need_mental_health_support_bool": False
+                "need_mental_health_support_bool": False,
             }
         }
+
 
 class ClientResponse(ClientBase):
     id: int
 
     class Config:
         from_attributes = True
+
 
 class ClientUpdate(BaseModel):
     age: Optional[int] = Field(None, ge=18)
@@ -132,6 +146,7 @@ class ClientUpdate(BaseModel):
     time_unemployed: Optional[int] = Field(None, ge=0)
     need_mental_health_support_bool: Optional[bool] = None
 
+
 class ServiceResponse(BaseModel):
     client_id: int
     user_id: int
@@ -147,6 +162,7 @@ class ServiceResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class ServiceUpdate(BaseModel):
     employment_assistance: Optional[bool] = None
     life_stabilization: Optional[bool] = None
@@ -156,6 +172,7 @@ class ServiceUpdate(BaseModel):
     employer_financial_supports: Optional[bool] = None
     enhanced_referrals: Optional[bool] = None
     success_rate: Optional[int] = Field(None, ge=0, le=100)
+
 
 class ClientListResponse(BaseModel):
     clients: List[ClientResponse]
