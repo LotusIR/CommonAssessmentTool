@@ -4,10 +4,7 @@ on:
   push:
     branches: [master, main]
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main
-      - develop
+    branches: [master, main]
 
 jobs:
   test:
@@ -32,6 +29,9 @@ jobs:
       - name: Run Tests
         run: |
           python -m pytest tests/
+
+      - name: Run Pylint
+        run: |
           pylint --recursive=y ./app
 
       - name: Print Success Message
