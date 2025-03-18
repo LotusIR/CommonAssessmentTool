@@ -12,11 +12,11 @@ from app.models import User, UserRole
 from app.database import get_db
 from app.clients.service.client_service import ClientService
 from app.clients.schema import (
-    ClientResponse,
     ClientUpdate,
     ClientListResponse,
     ServiceResponse,
     ServiceUpdate,
+    ClientResponse,
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
