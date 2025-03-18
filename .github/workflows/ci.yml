@@ -30,26 +30,7 @@ jobs:
           python -m pip install --upgrade pip  # Upgrade pip to the latest version
           pip install setuptools wheel
           pip install -r requirements.txt  # Install dependencies from requirements.txt
-          pip install pylint pytest black
-
-      - name: Run black
-        id: black
-        run: |
-          black ./app
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "changes=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit changes if any difference
-        if: steps.black.outputs.changes == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git commit -m "Apply Black formatting"
-          git push
+          pip install pylint pytest
 
       - name: Run Tests
         run: |

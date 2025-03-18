@@ -1,11 +1,12 @@
 name: Auto Black Commit
 
 on:
-  push:
+  pull_request:
     branches: [master, main]
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   Black:
@@ -17,6 +18,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v5 # Set up Python environment
