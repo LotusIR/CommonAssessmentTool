@@ -23,6 +23,9 @@ def parse_arguments():
     parser.add_argument('--output', '-o', type=str, default='RandomForest.pkl', help='output model name')
     return parser.parse_args()
 
+def get_available_models():
+    return [file[:-4] for file in os.listdir(os.path.join(CURRENT_DIR, 'models')) if file.endswith(".pkl")]
+
 def prepare_models(model_name):
     """
     Prepare and train the Random Forest model using the dataset.
@@ -128,3 +131,5 @@ def main(model_name, output_name):
 if __name__ == "__main__":
     args = parse_arguments()
     main(args.model, args.output)
+
+    print(get_available_models())
