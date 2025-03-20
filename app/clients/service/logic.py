@@ -26,9 +26,10 @@ COLUMN_INTERVENTIONS = [
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 # Load model
 def load_model(model_name):
-    model_path = os.path.join(CURRENT_DIR, 'models', model_name + '.pkl')
+    model_path = os.path.join(CURRENT_DIR, "models", model_name + ".pkl")
     with open(model_path, "rb") as model_file:
         model = pickle.load(model_file)
     return model
@@ -212,7 +213,7 @@ def process_results(baseline_pred, results_matrix):
     return {"baseline": baseline_pred[-1], "interventions": result_list}
 
 
-def interpret_and_calculate(input_data, model_name = 'RandomForest'):
+def interpret_and_calculate(input_data, model_name="RandomForest"):
     """
     Main function to process input data and generate intervention recommendations.
 
@@ -265,12 +266,12 @@ if __name__ == "__main__":
         "time_unemployed": "1",
         "need_mental_health_support_bool": "1",
     }
-    print('result for Random Forest model')
+    print("result for Random Forest model")
     results = interpret_and_calculate(test_data)
     print(results)
-    print('result for Gradient Boosting model')
-    results = interpret_and_calculate(test_data, 'GradientBoosting')
+    print("result for Gradient Boosting model")
+    results = interpret_and_calculate(test_data, "GradientBoosting")
     print(results)
-    print('result for Support Vector model')
-    results = interpret_and_calculate(test_data, 'SupportVector')
+    print("result for Support Vector model")
+    results = interpret_and_calculate(test_data, "SupportVector")
     print(results)

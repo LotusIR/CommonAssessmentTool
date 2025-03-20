@@ -17,14 +17,32 @@ from sklearn.svm import SVR
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='Training model from data, save the model to output file.')
-    parser.add_argument('--model', '-m', type=str, choices = ['RandomForest', 'GradientBoosting', 'SupportVector'], default='RandomForest', help='choose the type of the model')
-    parser.add_argument('--output', '-o', type=str, default='RandomForest.pkl', help='output model name')
+    parser = argparse.ArgumentParser(
+        description="Training model from data, save the model to output file."
+    )
+    parser.add_argument(
+        "--model",
+        "-m",
+        type=str,
+        choices=["RandomForest", "GradientBoosting", "SupportVector"],
+        default="RandomForest",
+        help="choose the type of the model",
+    )
+    parser.add_argument(
+        "--output", "-o", type=str, default="RandomForest.pkl", help="output model name"
+    )
     return parser.parse_args()
 
+
 def get_available_models():
-    return [file[:-4] for file in os.listdir(os.path.join(CURRENT_DIR, 'models')) if file.endswith(".pkl")]
+    return [
+        file[:-4]
+        for file in os.listdir(os.path.join(CURRENT_DIR, "models"))
+        if file.endswith(".pkl")
+    ]
+
 
 def prepare_models(model_name):
     """
@@ -85,7 +103,9 @@ def prepare_models(model_name):
     if model_name == "RandomForest":
         model = RandomForestRegressor(n_estimators=100, random_state=42)
     elif model_name == "GradientBoosting":
-        model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, random_state=42)
+        model = GradientBoostingRegressor(
+            n_estimators=100, learning_rate=0.1, random_state=42
+        )
     elif model_name == "SupportVector":
         model = SVR(kernel="rbf", C=1.0, epsilon=0.1)
     else:
@@ -102,7 +122,7 @@ def save_model(model, filename="model.pkl"):
         model: Trained model to save
         filename (str): Name of the file to save the model to
     """
-    with open(os.path.join(CURRENT_DIR, 'models', filename), "wb") as model_file:
+    with open(os.path.join(CURRENT_DIR, "models", filename), "wb") as model_file:
         pickle.dump(model, model_file)
 
 
@@ -116,7 +136,7 @@ def load_model(filename="model.pkl"):
     Returns:
         The loaded model
     """
-    with open(os.path.join(CURRENT_DIR, 'models', filename), "rb") as model_file:
+    with open(os.path.join(CURRENT_DIR, "models", filename), "rb") as model_file:
         return pickle.load(model_file)
 
 

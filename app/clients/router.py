@@ -22,12 +22,14 @@ from app.clients.schema import (
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
+
 @router.get("/model/list", summary="List all available ML models")
 async def list_available_models():
     """
     API endpoint to return the list of available ML models.
     """
     return {"available_models": get_available_models()}
+
 
 @router.get("/", response_model=ClientListResponse)
 async def get_clients(
