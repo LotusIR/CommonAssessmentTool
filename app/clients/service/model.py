@@ -5,15 +5,46 @@ Handles the preparation, training, and saving of the prediction model.
 
 # Standard library imports
 import pickle
+import argparse
+import os
 
 # Third-party imports
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.svm import SVR
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def prepare_models():
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Training model from data, save the model to output file."
+    )
+    parser.add_argument(
+        "--model",
+        "-m",
+        type=str,
+        choices=["RandomForest", "GradientBoosting", "SupportVector"],
+        default="RandomForest",
+        help="choose the type of the model",
+    )
+    parser.add_argument(
+        "--output", "-o", type=str, default="RandomForest.pkl", help="output model name"
+    )
+    return parser.parse_args()
+
+
+def get_available_models():
+    return [
+        file[:-4]
+        for file in os.listdir(os.path.join(CURRENT_DIR, "models"))
+        if file.endswith(".pkl")
+    ]
+
+
+def prepare_models(model_name):
     """
     Prepare and train the Random Forest model using the dataset.
 
@@ -21,7 +52,7 @@ def prepare_models():
         RandomForestRegressor: Trained model for predicting success rates
     """
     # Load dataset
-    data = pd.read_csv("data_commontool.csv")
+    data = pd.read_csv(os.path.join(CURRENT_DIR, "data_commontool.csv"))
     # Define feature columns
     feature_columns = [
         "age",  # Client's age
@@ -69,7 +100,16 @@ def prepare_models():
         features, targets, test_size=0.2, random_state=42
     )
     # Initialize and train the model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    if model_name == "RandomForest":
+        model = RandomForestRegressor(n_estimators=100, random_state=42)
+    elif model_name == "GradientBoosting":
+        model = GradientBoostingRegressor(
+            n_estimators=100, learning_rate=0.1, random_state=42
+        )
+    elif model_name == "SupportVector":
+        model = SVR(kernel="rbf", C=1.0, epsilon=0.1)
+    else:
+        raise ValueError("Invalid model name")
     model.fit(features_train, targets_train)
     return model
 
@@ -82,7 +122,7 @@ def save_model(model, filename="model.pkl"):
         model: Trained model to save
         filename (str): Name of the file to save the model to
     """
-    with open(filename, "wb") as model_file:
+    with open(os.path.join(CURRENT_DIR, "models", filename), "wb") as model_file:
         pickle.dump(model, model_file)
 
 
@@ -96,17 +136,20 @@ def load_model(filename="model.pkl"):
     Returns:
         The loaded model
     """
-    with open(filename, "rb") as model_file:
+    with open(os.path.join(CURRENT_DIR, "models", filename), "rb") as model_file:
         return pickle.load(model_file)
 
 
-def main():
+def main(model_name, output_name):
     """Main function to train and save the model."""
     print("Starting model training...")
-    model = prepare_models()
-    save_model(model)
+    model = prepare_models(model_name)
+    save_model(model, output_name)
     print("Model training completed and saved successfully.")
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_arguments()
+    main(args.model, args.output)
+
+    print(get_available_models())

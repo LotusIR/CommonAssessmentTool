@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.auth.router import get_current_user, get_admin_user
 from app.models import User, UserRole
+from app.clients.service.model import get_available_models
 
 from app.database import get_db
 from app.clients.service.client_service import ClientService
@@ -20,6 +21,14 @@ from app.clients.schema import (
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
+
+
+@router.get("/model/list", summary="List all available ML models")
+async def list_available_models():
+    """
+    API endpoint to return the list of available ML models.
+    """
+    return {"available_models": get_available_models()}
 
 
 @router.get("/", response_model=ClientListResponse)
