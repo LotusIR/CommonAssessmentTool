@@ -8,7 +8,9 @@ WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
 
 # Install required packages
-RUN pip install --no-cache-dir -r /code/requirements.txt
+RUN pip install --no-cache-dir -r /code/requirements.txt \
+    && apt-get update \
+    && apt-get install -y jq
 
 # Copy the rest of your application
 COPY . /code/

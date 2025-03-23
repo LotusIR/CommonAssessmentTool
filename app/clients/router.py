@@ -3,18 +3,19 @@ Router module for client-related endpoints.
 Handles all HTTP requests for client operations including create, read, update, and delete.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.auth.router import get_current_user, get_admin_user
 from app.models import User, UserRole
 from app.clients.service.model import get_available_models
-
+import json
 from app.database import get_db
 from app.clients.service.client_service import ClientService
 from app.clients.schema import (
     ClientResponse,
     ClientUpdate,
+    ClientCreate,
     ClientListResponse,
     ServiceResponse,
     ServiceUpdate,
@@ -177,6 +178,17 @@ async def update_client(
 ):
     """Update a client's information"""
     return ClientService.update_client(db, client_id, client_data)
+
+@router.post("/")
+async def create_client(
+    client: ClientCreate,
+    current_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db),
+):
+    """Create a client's information"""
+    client = ClientService.create_client(db, client)
+    return Response(status_code=status.HTTP_201_CREATED, content=json.dumps({"id": client.id}))
+
 
 
 @router.put("/{client_id}/services/{user_id}", response_model=ServiceResponse)

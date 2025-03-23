@@ -146,6 +146,32 @@ class ClientUpdate(BaseModel):
     time_unemployed: Optional[int] = Field(None, ge=0)
     need_mental_health_support_bool: Optional[bool] = None
 
+class ClientCreate(BaseModel):
+    age: Optional[int] = Field(None, ge=18)
+    gender: Optional[Gender] = None
+    work_experience: Optional[int] = Field(None, ge=0)
+    canada_workex: Optional[int] = Field(None, ge=0)
+    dep_num: Optional[int] = Field(None, ge=0)
+    canada_born: Optional[bool] = None
+    citizen_status: Optional[bool] = None
+    level_of_schooling: Optional[int] = Field(None, ge=1, le=14)
+    fluent_english: Optional[bool] = None
+    reading_english_scale: Optional[int] = Field(None, ge=0, le=10)
+    speaking_english_scale: Optional[int] = Field(None, ge=0, le=10)
+    writing_english_scale: Optional[int] = Field(None, ge=0, le=10)
+    numeracy_scale: Optional[int] = Field(None, ge=0, le=10)
+    computer_scale: Optional[int] = Field(None, ge=0, le=10)
+    transportation_bool: Optional[bool] = None
+    caregiver_bool: Optional[bool] = None
+    housing: Optional[int] = Field(None, ge=1, le=10)
+    income_source: Optional[int] = Field(None, ge=1, le=11)
+    felony_bool: Optional[bool] = None
+    attending_school: Optional[bool] = None
+    currently_employed: Optional[bool] = None
+    substance_use: Optional[bool] = None
+    time_unemployed: Optional[int] = Field(None, ge=0)
+    need_mental_health_support_bool: Optional[bool] = None
+
 
 class ServiceResponse(BaseModel):
     client_id: int
