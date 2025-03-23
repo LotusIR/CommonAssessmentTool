@@ -121,7 +121,7 @@ async def login_for_access_token(
 @router.post("/users", response_model=UserResponse)
 async def create_user(
     user_data: UserCreate,
-    # current_user: User = Depends(get_admin_user),
+    current_user: User = Depends(get_admin_user),
     db: Session = Depends(get_db),
 ):
     """Create a new user (admin only)"""
