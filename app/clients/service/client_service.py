@@ -71,6 +71,7 @@ class ClientService:
         substance_use: Optional[bool] = None,
         time_unemployed: Optional[int] = None,
         need_mental_health_support_bool: Optional[bool] = None,
+        current_model: Optional[str] = None,
     ):
         """Get clients filtered by any combination of criteria"""
         query = db.query(Client)
@@ -146,6 +147,8 @@ class ClientService:
                 Client.need_mental_health_support_bool
                 == need_mental_health_support_bool
             )
+        if current_model is not None:
+            query = query.filter(Client.current_model == current_model)
 
         try:
             return query.all()
@@ -364,3 +367,13 @@ class ClientService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to delete client: {str(e)}",
             )
+    
+    @staticmethod
+    def get_current_model(db: Session, client_id: int):
+        client = db.query(Client).filter(Client.id == client_id).first()
+        if not client:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Client with id {client_id} not found",
+            )
+        return {"current_model": client.current_model}

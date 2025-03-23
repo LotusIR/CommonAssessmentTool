@@ -70,6 +70,7 @@ def clean_input_data(input_data):
         "substance_use",
         "time_unemployed",
         "need_mental_health_support_bool",
+        "current_model",
     ]
     demographics = {key: input_data[key] for key in columns}
     output = []
@@ -265,6 +266,7 @@ if __name__ == "__main__":
         "substance_use": "1",
         "time_unemployed": "1",
         "need_mental_health_support_bool": "1",
+        "current_model": "RandomForest",
     }
     print("result for Random Forest model")
     results = interpret_and_calculate(test_data)
