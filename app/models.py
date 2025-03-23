@@ -2,8 +2,7 @@
 Database models module defining SQLAlchemy ORM models for the Common Assessment Tool.
 Contains the Client model for storing client information in the database.
 """
-
-from app.database import Base
+import enum
 from sqlalchemy import (
     Column,
     Integer,
@@ -14,15 +13,22 @@ from sqlalchemy import (
     Enum,
 )
 from sqlalchemy.orm import relationship
-import enum
+from app.database import Base
+
 
 
 class UserRole(str, enum.Enum):
-    admin = "admin"
-    case_worker = "case_worker"
+    """
+    Enum for user role.
+    """
+    ADMIN = "admin"
+    CASE_WORKER = "case_worker"
 
 
 class User(Base):
+    """
+    User model representing client data in the database
+    """
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

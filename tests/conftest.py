@@ -24,7 +24,7 @@ def test_db():
             username="testadmin",
             email="testadmin@example.com",
             hashed_password=get_password_hash("testpass123"),
-            role=UserRole.admin
+            role=UserRole.ADMIN
         )
         db.add(admin_user)
 
@@ -33,7 +33,7 @@ def test_db():
             username="testworker",
             email="worker@example.com",
             hashed_password=get_password_hash("workerpass123"),
-            role=UserRole.case_worker
+            role=UserRole.CASE_WORKER
         )
         db.add(case_worker)
         
