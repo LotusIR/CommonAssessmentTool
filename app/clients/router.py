@@ -18,6 +18,7 @@ from app.clients.schema import (
     ClientListResponse,
     ServiceResponse,
     ServiceUpdate,
+    ModelUpdate,
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
@@ -220,3 +221,14 @@ async def get_current_model(
     API endpoint to get the currently using ML model.
     """
     return ClientService.get_current_model(db, client_id)
+
+@router.put("/model/{client_id}/change", summary="Change the ML model used by the user")
+async def get_current_model(
+    client_id: int,
+    data: ModelUpdate,
+    db: Session = Depends(get_db),
+):
+    """
+    API endpoint to change the currently using ML model.
+    """
+    return ClientService.set_model(db, client_id, data)

@@ -8,7 +8,7 @@ from sqlalchemy import and_
 from fastapi import HTTPException, status
 from typing import List, Optional, Dict, Any
 from app.models import Client, ClientCase, User
-from app.clients.schema import ClientUpdate, ServiceUpdate, ServiceResponse
+from app.clients.schema import ClientUpdate, ServiceUpdate, ServiceResponse, ModelUpdate
 
 
 class ClientService:
@@ -377,3 +377,22 @@ class ClientService:
                 detail=f"Client with id {client_id} not found",
             )
         return {"current_model": client.current_model}
+    
+    @staticmethod
+    def set_model(db: Session, client_id: int, data: ModelUpdate):
+        client = db.query(Client).filter(Client.id == client_id).first()
+        if not client:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Client with id {client_id} not found",
+            )
+        try:
+            client.current_model = data.new_model
+            db.commit()
+            return {"message": "Model updated", "client_id": client_id, "current_model": client.current_model}
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to change model for client: {str(e)}",
+            )

@@ -150,6 +150,8 @@ class ClientUpdate(BaseModel):
     need_mental_health_support_bool: Optional[bool] = None
     current_model: Optional[str] = None
 
+class ModelUpdate(BaseModel):
+    new_model: Optional[str] = None
 
 class ServiceResponse(BaseModel):
     client_id: int
