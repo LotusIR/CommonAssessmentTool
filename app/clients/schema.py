@@ -146,6 +146,7 @@ class ClientUpdate(BaseModel):
     time_unemployed: Optional[int] = Field(None, ge=0)
     need_mental_health_support_bool: Optional[bool] = None
 
+
 class ClientCreate(BaseModel):
     age: Optional[int] = Field(None, ge=18)
     gender: Optional[Gender] = None

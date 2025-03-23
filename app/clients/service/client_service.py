@@ -8,7 +8,12 @@ from sqlalchemy import and_
 from fastapi import HTTPException, status
 from typing import List, Optional, Dict, Any
 from app.models import Client, ClientCase, User
-from app.clients.schema import ClientUpdate, ServiceUpdate, ServiceResponse, ClientCreate
+from app.clients.schema import (
+    ClientUpdate,
+    ServiceUpdate,
+    ServiceResponse,
+    ClientCreate,
+)
 
 
 class ClientService:
@@ -364,7 +369,7 @@ class ClientService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to delete client: {str(e)}",
             )
-    
+
     @staticmethod
     def create_client(db: Session, client_create: ClientCreate):
         client = Client()

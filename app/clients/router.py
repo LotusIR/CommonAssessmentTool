@@ -179,6 +179,7 @@ async def update_client(
     """Update a client's information"""
     return ClientService.update_client(db, client_id, client_data)
 
+
 @router.post("/")
 async def create_client(
     client: ClientCreate,
@@ -187,8 +188,9 @@ async def create_client(
 ):
     """Create a client's information"""
     client = ClientService.create_client(db, client)
-    return Response(status_code=status.HTTP_201_CREATED, content=json.dumps({"id": client.id}))
-
+    return Response(
+        status_code=status.HTTP_201_CREATED, content=json.dumps({"id": client.id})
+    )
 
 
 @router.put("/{client_id}/services/{user_id}", response_model=ServiceResponse)
