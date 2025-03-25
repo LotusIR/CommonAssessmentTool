@@ -23,6 +23,7 @@ from app.clients.schema import (
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
+
 @router.get("/", response_model=ClientListResponse)
 async def get_clients(
     current_user: User = Depends(get_admin_user),
@@ -205,12 +206,14 @@ async def delete_client(
     ClientService.delete_client(db, client_id)
     return None
 
+
 @router.get("/models", summary="List all available ML models")
 async def list_available_models():
     """
     API endpoint to return the list of available ML models.
     """
     return {"available_models": get_available_models()}
+
 
 @router.get("/model/{client_id}", summary="Show the ML model used by the user")
 async def get_current_model(
@@ -221,6 +224,7 @@ async def get_current_model(
     API endpoint to get the currently using ML model.
     """
     return ClientService.get_current_model(db, client_id)
+
 
 @router.put("{client_id}/model", summary="Change the ML model used by the user")
 async def get_current_model(
