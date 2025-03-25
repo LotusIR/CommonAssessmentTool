@@ -222,7 +222,7 @@ async def get_current_model(
     """
     return ClientService.get_current_model(db, client_id)
 
-@router.put("/clients/{client_id}/mode", summary="Change the ML model used by the user")
+@router.put("{client_id}/model", summary="Change the ML model used by the user")
 async def get_current_model(
     client_id: int,
     data: ModelUpdate,
