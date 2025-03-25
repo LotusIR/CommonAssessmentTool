@@ -367,7 +367,7 @@ class ClientService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to delete client: {str(e)}",
             )
-    
+
     @staticmethod
     def get_current_model(db: Session, client_id: int):
         client = db.query(Client).filter(Client.id == client_id).first()
@@ -377,7 +377,7 @@ class ClientService:
                 detail=f"Client with id {client_id} not found",
             )
         return {"current_model": client.current_model}
-    
+
     @staticmethod
     def set_model(db: Session, client_id: int, data: ModelUpdate):
         client = db.query(Client).filter(Client.id == client_id).first()
@@ -389,7 +389,11 @@ class ClientService:
         try:
             client.current_model = data.new_model
             db.commit()
-            return {"message": "Model updated", "client_id": client_id, "current_model": client.current_model}
+            return {
+                "message": "Model updated",
+                "client_id": client_id,
+                "current_model": client.current_model,
+            }
         except Exception as e:
             db.rollback()
             raise HTTPException(
