@@ -369,13 +369,15 @@ class ClientService:
 
     @staticmethod
     def get_case_or_404nf(db: Session, client_id: int, user_id: int) -> ClientCase:
-        case = db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
+        case = (
+            db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
+        )
         if not case:
             raise HTTPException(
-                status_code=HTTP_404_NOT_FOUND, 
+                status_code=HTTP_404_NOT_FOUND,
                 detail=f"No case for client {client_id} with worker {user_id}. "
                 f"Cannot update services for a non-existent case assignment.",
-                )
+            )
         return case
 
     @staticmethod
