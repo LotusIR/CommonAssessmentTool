@@ -152,3 +152,32 @@ def test_delete_client(client, admin_headers):
     # Test deleting non-existent client
     response = client.delete("/clients/999", headers=admin_headers)
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
+# Test model operation
+def test_get_current_model(client, admin_headers):
+    """Test get current model"""
+    response = client.get("/clients/1/model", headers=admin_headers)
+    assert response.status_code == status.HTTP_200_OK
+    assert "current_model" in response.json()
+
+
+def test_set_current_model(client, admin_headers):
+    """Test set model for a client"""
+    new_model_payload = {"new_model": "RandomForest"}
+
+    response = client.put(
+        "/clients/1/model",
+        headers=admin_headers,
+        json=new_model_payload
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    data = response.json()
+    assert data["current_model"] == "RandomForest"
+    assert data["client_id"] == 1
+    assert "message" in data and "updated" in data["message"].lower()
+
+    # verify it updated by calling GET again
+    response_check = client.get("/clients/1/model", headers=admin_headers)
+    assert response_check.status_code == status.HTTP_200_OK
+    assert response_check.json()["current_model"] == "RandomForest"
