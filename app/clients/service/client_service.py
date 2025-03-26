@@ -26,7 +26,7 @@ class ClientService:
         ClientService.validate_pagination(skip, limit)
         return {
             "clients": db.query(Client).offset(skip).limit(limit).all(),
-            "total": db.query(Client).count()
+            "total": db.query(Client).count(),
         }
 
     @staticmethod
@@ -93,7 +93,9 @@ class ClientService:
 
     @staticmethod
     def get_client_services(db: Session, client_id: int):
-        client_cases = db.query(ClientCase).filter(ClientCase.client_id == client_id).all()
+        client_cases = (
+            db.query(ClientCase).filter(ClientCase.client_id == client_id).all()
+        )
         """Get all services for a specific client with case worker info"""
         if not client_cases:
             raise HTTPException(
@@ -132,9 +134,12 @@ class ClientService:
     def update_client(db: Session, client_id: int, client_update: ClientUpdate):
         """Update a client's information"""
         client = ClientService.get_client_or_404nf(db, client_id)
-        ClientService.update_model_instance(client, client_update.dict(exclude_unset=True))
+        ClientService.update_model_instance(
+            client, client_update.dict(exclude_unset=True)
+        )
         try:
-            db.commit(); db.refresh(client)
+            db.commit()
+            db.refresh(client)
             return client
         except Exception as e:
             db.rollback()
@@ -144,10 +149,14 @@ class ClientService:
             )
 
     @staticmethod
-    def update_client_services(db: Session, client_id: int, user_id: int, service_update: ServiceUpdate):
+    def update_client_services(
+        db: Session, client_id: int, user_id: int, service_update: ServiceUpdate
+    ):
         """Update a client's services and outcomes for a specific case worker"""
         client_case = ClientService.get_case_or_404nf(db, client_id, user_id)
-        ClientService.update_model_instance(client_case, service_update.dict(exclude_unset=True))
+        ClientService.update_model_instance(
+            client_case, service_update.dict(exclude_unset=True)
+        )
         try:
             db.commit()
             db.refresh(client_case)
@@ -164,7 +173,11 @@ class ClientService:
         """Create a new case assignment"""
         client = ClientService.get_client_or_404nf(db, client_id)
         case_worker = ClientService.get_caseworker_or_404nf(db, case_worker_id)
-        existing = db.query(ClientCase).filter_by(client_id=client_id, user_id=case_worker_id).first()
+        existing = (
+            db.query(ClientCase)
+            .filter_by(client_id=client_id, user_id=case_worker_id)
+            .first()
+        )
         if existing:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -185,8 +198,8 @@ class ClientService:
             success_rate=0,
         )
         try:
-            db.add(new_case); 
-            db.commit(); 
+            db.add(new_case)
+            db.commit()
             db.refresh(new_case)
             return new_case
         except Exception as e:
@@ -202,7 +215,8 @@ class ClientService:
         client = ClientService.get_client_or_404nf(db, client_id)
         try:
             db.query(ClientCase).filter_by(client_id=client_id).delete()
-            db.delete(client); db.commit()
+            db.delete(client)
+            db.commit()
         except Exception as e:
             db.rollback()
             raise HTTPException(
@@ -222,20 +236,21 @@ class ClientService:
             client.current_model = data.new_model
             db.commit()
             return {
-                "message": "Model updated", 
-                "client_id": client_id, 
+                "message": "Model updated",
+                "client_id": client_id,
                 "current_model": client.current_model,
-                }
+            }
         except Exception as e:
             db.rollback()
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to update client services: {str(e)}",
             )
- 
+
     """
     Hepler methods for public API methods
     """
+
     @staticmethod
     def get_client_or_404nf(db: Session, client_id: int) -> Client:
         client = db.query(Client).filter(Client.id == client_id).first()
@@ -258,13 +273,15 @@ class ClientService:
 
     @staticmethod
     def get_case_or_404nf(db: Session, client_id: int, user_id: int) -> ClientCase:
-        case = db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
+        case = (
+            db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
+        )
         if not case:
             raise HTTPException(
-                status_code=HTTP_404_NOT_FOUND, 
+                status_code=HTTP_404_NOT_FOUND,
                 detail=f"No case for client {client_id} with worker {user_id}. "
                 f"Cannot update services for a non-existent case assignment.",
-                )
+            )
         return case
 
     @staticmethod
@@ -287,7 +304,9 @@ class ClientService:
 
     @staticmethod
     def validate_criteria(filters: dict):
-        if (level := filters.get("education_level")) is not None and not (1 <= level <= 14):
+        if (level := filters.get("education_level")) is not None and not (
+            1 <= level <= 14
+        ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Education level must be between 1 and 14",
