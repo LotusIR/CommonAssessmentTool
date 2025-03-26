@@ -46,6 +46,7 @@ class PredictionInput(BaseModel):
     substance_use: str
     time_unemployed: int
     need_mental_health_support_bool: str
+    current_model: str
 
 
 class ClientBase(BaseModel):
@@ -81,6 +82,7 @@ class ClientBase(BaseModel):
     need_mental_health_support_bool: bool = Field(
         description="Needs mental health support"
     )
+    current_model: str = Field(description="the currently using ML model")
 
     class Config:
         json_schema_extra = {
@@ -109,6 +111,7 @@ class ClientBase(BaseModel):
                 "substance_use": False,
                 "time_unemployed": 6,
                 "need_mental_health_support_bool": False,
+                "current_model": "RamdomForest",
             }
         }
 
@@ -145,6 +148,11 @@ class ClientUpdate(BaseModel):
     substance_use: Optional[bool] = None
     time_unemployed: Optional[int] = Field(None, ge=0)
     need_mental_health_support_bool: Optional[bool] = None
+    current_model: Optional[str] = None
+
+
+class ModelUpdate(BaseModel):
+    new_model: Optional[str] = None
 
 
 class ClientCreate(BaseModel):

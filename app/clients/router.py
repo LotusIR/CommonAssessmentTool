@@ -19,17 +19,10 @@ from app.clients.schema import (
     ClientListResponse,
     ServiceResponse,
     ServiceUpdate,
+    ModelUpdate,
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
-
-
-@router.get("/model/list", summary="List all available ML models")
-async def list_available_models():
-    """
-    API endpoint to return the list of available ML models.
-    """
-    return {"available_models": get_available_models()}
 
 
 @router.get("/", response_model=ClientListResponse)
@@ -42,6 +35,14 @@ async def get_clients(
     _auth_user: User = Depends(get_admin_user),
 ):
     return ClientService.get_clients(db, skip, limit)
+
+
+@router.get("/models", summary="List all available ML models")
+async def list_available_models():
+    """
+    API endpoint to return the list of available ML models.
+    """
+    return {"available_models": get_available_models()}
 
 
 @router.get("/{client_id}", response_model=ClientResponse)
@@ -80,7 +81,7 @@ async def get_clients_by_criteria(
     substance_use: Optional[bool] = None,
     time_unemployed: Optional[int] = Query(None, ge=0),
     need_mental_health_support_bool: Optional[bool] = None,
-    _auth_user: User = Depends(get_admin_user),
+    current_model: Optional[str] = None,
     db: Session = Depends(get_db),
 ):
     """Search clients by any combination of criteria"""
@@ -110,6 +111,7 @@ async def get_clients_by_criteria(
         substance_use=substance_use,
         time_unemployed=time_unemployed,
         need_mental_health_support_bool=need_mental_health_support_bool,
+        current_model=current_model,
     )
 
 
@@ -224,3 +226,26 @@ async def delete_client(
     """Delete a client"""
     ClientService.delete_client(db, client_id)
     return None
+
+
+@router.get("/{client_id}/model", summary="Show the ML model used by the user")
+async def get_current_model(
+    client_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    API endpoint to get the currently using ML model.
+    """
+    return ClientService.get_current_model(db, client_id)
+
+
+@router.put("/{client_id}/model", summary="Change the ML model used by the user")
+async def set_current_model(
+    client_id: int,
+    data: ModelUpdate,
+    db: Session = Depends(get_db),
+):
+    """
+    API endpoint to change the currently using ML model.
+    """
+    return ClientService.set_model(db, client_id, data)

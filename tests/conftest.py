@@ -62,7 +62,8 @@ def test_db():
             currently_employed=False,
             substance_use=False,
             time_unemployed=6,
-            need_mental_health_support_bool=False
+            need_mental_health_support_bool=False,
+            current_model = "RamdomForest",
         )
         
         client2 = Client(
@@ -89,7 +90,8 @@ def test_db():
             currently_employed=True,
             substance_use=False,
             time_unemployed=0,
-            need_mental_health_support_bool=False
+            need_mental_health_support_bool=False,
+            current_model = "RandomForest"
         )
         
         db.add(client1)
