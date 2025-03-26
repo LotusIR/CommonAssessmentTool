@@ -311,4 +311,3 @@ class ClientService:
     def update_model_instance(instance, update_data: dict):
         for field, value in update_data.items():
             setattr(instance, field, value)
-
