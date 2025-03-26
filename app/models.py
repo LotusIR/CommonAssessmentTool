@@ -15,6 +15,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 import enum
+from app.clients.service.model import get_available_models
 
 
 class UserRole(str, enum.Enum):
@@ -83,6 +84,9 @@ class Client(Base):
     substance_use = Column(Boolean)
     time_unemployed = Column(Integer, CheckConstraint("time_unemployed >= 0"))
     need_mental_health_support_bool = Column(Boolean)
+    current_model = Column(
+        String(50), nullable=False, default=get_available_models()[0]
+    )
 
     cases = relationship("ClientCase", back_populates="client")
 
