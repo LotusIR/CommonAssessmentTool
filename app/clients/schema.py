@@ -4,10 +4,10 @@ Defines schemas for client data, predictions, and API responses.
 """
 
 # Standard library imports
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from enum import IntEnum
-from app.models import UserRole
+from app.models import Client
 
 
 # Enums for validation
@@ -212,3 +212,99 @@ class ServiceUpdate(BaseModel):
 class ClientListResponse(BaseModel):
     clients: List[ClientResponse]
     total: int
+
+
+class ClientFilters:
+    def __init__(
+        self,
+        employment_status: Optional[bool] = None,
+        education_level: Optional[int] = None,
+        age_min: Optional[int] = None,
+        gender: Optional[int] = None,
+        work_experience: Optional[int] = None,
+        canada_workex: Optional[int] = None,
+        dep_num: Optional[int] = None,
+        canada_born: Optional[bool] = None,
+        citizen_status: Optional[bool] = None,
+        fluent_english: Optional[bool] = None,
+        reading_english_scale: Optional[int] = None,
+        speaking_english_scale: Optional[int] = None,
+        writing_english_scale: Optional[int] = None,
+        numeracy_scale: Optional[int] = None,
+        computer_scale: Optional[int] = None,
+        transportation_bool: Optional[bool] = None,
+        caregiver_bool: Optional[bool] = None,
+        housing: Optional[int] = None,
+        income_source: Optional[int] = None,
+        felony_bool: Optional[bool] = None,
+        attending_school: Optional[bool] = None,
+        substance_use: Optional[bool] = None,
+        time_unemployed: Optional[int] = None,
+        need_mental_health_support_bool: Optional[bool] = None,
+        current_model: Optional[str] = None,
+    ):
+        self.field_map = {
+            "employment_status": Client.currently_employed,
+            "age_min": lambda v: Client.age >= v,
+            "gender": Client.gender,
+            "education_level": Client.level_of_schooling,
+            "work_experience": Client.work_experience,
+            "canada_workex": Client.canada_workex,
+            "dep_num": Client.dep_num,
+            "canada_born": Client.canada_born,
+            "citizen_status": Client.citizen_status,
+            "fluent_english": Client.fluent_english,
+            "reading_english_scale": Client.reading_english_scale,
+            "speaking_english_scale": Client.speaking_english_scale,
+            "writing_english_scale": Client.writing_english_scale,
+            "numeracy_scale": Client.numeracy_scale,
+            "computer_scale": Client.computer_scale,
+            "transportation_bool": Client.transportation_bool,
+            "caregiver_bool": Client.caregiver_bool,
+            "housing": Client.housing,
+            "income_source": Client.income_source,
+            "felony_bool": Client.felony_bool,
+            "attending_school": Client.attending_school,
+            "substance_use": Client.substance_use,
+            "time_unemployed": Client.time_unemployed,
+            "need_mental_health_support_bool": Client.need_mental_health_support_bool,
+            "current_model": Client.current_model,
+        }
+        self.employment_status: Optional[bool] = employment_status
+        self.education_level: Optional[int] = education_level
+        self.age_min: Optional[int] = age_min
+        self.gender: Optional[int] = gender
+        self.work_experience: Optional[int] = work_experience
+        self.canada_workex: Optional[int] = canada_workex
+        self.dep_num: Optional[int] = dep_num
+        self.canada_born: Optional[bool] = canada_born
+        self.citizen_status: Optional[bool] = citizen_status
+        self.fluent_english: Optional[bool] = fluent_english
+        self.reading_english_scale: Optional[int] = reading_english_scale
+        self.speaking_english_scale: Optional[int] = speaking_english_scale
+        self.writing_english_scale: Optional[int] = writing_english_scale
+        self.numeracy_scale: Optional[int] = numeracy_scale
+        self.computer_scale: Optional[int] = computer_scale
+        self.transportation_bool: Optional[bool] = transportation_bool
+        self.caregiver_bool: Optional[bool] = caregiver_bool
+        self.housing: Optional[int] = housing
+        self.income_source: Optional[int] = income_source
+        self.felony_bool: Optional[bool] = felony_bool
+        self.attending_school: Optional[bool] = attending_school
+        self.substance_use: Optional[bool] = substance_use
+        self.time_unemployed: Optional[int] = time_unemployed
+        self.need_mental_health_support_bool: Optional[bool] = (
+            need_mental_health_support_bool
+        )
+        self.current_model: Optional[str] = current_model
+
+    def build_filter(self):
+        filter = []
+        for key, value in self.field_map.items():
+            if not hasattr(self, key) or getattr(self, key) is None:
+                continue
+            if callable(value):
+                filter.append(value(getattr(self, key)))
+            else:
+                filter.append(value == getattr(self, key))
+        return filter
