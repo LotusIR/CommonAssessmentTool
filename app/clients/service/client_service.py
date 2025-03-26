@@ -4,16 +4,15 @@ Provides CRUD operations and business logic for client management.
 """
 
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 from fastapi import HTTPException, status
-from typing import List, Optional, Dict, Any
+from typing import Optional
 from app.models import Client, ClientCase, User
 from app.clients.schema import (
     ClientUpdate,
     ServiceUpdate,
-    ServiceResponse,
     ClientCreate,
     ModelUpdate,
+    ClientFilters
 )
 
 
@@ -38,41 +37,17 @@ class ClientService:
     @staticmethod
     def get_clients_by_criteria(
         db: Session,
-        employment_status: Optional[bool] = None,
-        education_level: Optional[int] = None,
-        age_min: Optional[int] = None,
-        gender: Optional[int] = None,
-        work_experience: Optional[int] = None,
-        canada_workex: Optional[int] = None,
-        dep_num: Optional[int] = None,
-        canada_born: Optional[bool] = None,
-        citizen_status: Optional[bool] = None,
-        fluent_english: Optional[bool] = None,
-        reading_english_scale: Optional[int] = None,
-        speaking_english_scale: Optional[int] = None,
-        writing_english_scale: Optional[int] = None,
-        numeracy_scale: Optional[int] = None,
-        computer_scale: Optional[int] = None,
-        transportation_bool: Optional[bool] = None,
-        caregiver_bool: Optional[bool] = None,
-        housing: Optional[int] = None,
-        income_source: Optional[int] = None,
-        felony_bool: Optional[bool] = None,
-        attending_school: Optional[bool] = None,
-        substance_use: Optional[bool] = None,
-        time_unemployed: Optional[int] = None,
-        need_mental_health_support_bool: Optional[bool] = None,
-        current_model: Optional[str] = None,
+        filters: ClientFilters
     ):
         filters = locals().copy()
         filters.pop("db")
 
         ClientService.validate_criteria(filters)
         """Get clients filtered by any combination of criteria"""
-        query = db.query(Client)
+        
 
         try:
-            query = ClientService.filter_clients_by_criteria(query, **filters)
+            query = db.query(Client).filter(filters.build_filter())
             return query.all()
         except Exception as e:
             raise HTTPException(
@@ -319,45 +294,6 @@ class ClientService:
             )
 
     @staticmethod
-    def filter_clients_by_criteria(query, **filters):
-        field_map = {
-            "employment_status": Client.currently_employed,
-            "age_min": lambda v: Client.age >= v,
-            "gender": Client.gender,
-            "education_level": Client.level_of_schooling,
-            "work_experience": Client.work_experience,
-            "canada_workex": Client.canada_workex,
-            "dep_num": Client.dep_num,
-            "canada_born": Client.canada_born,
-            "citizen_status": Client.citizen_status,
-            "fluent_english": Client.fluent_english,
-            "reading_english_scale": Client.reading_english_scale,
-            "speaking_english_scale": Client.speaking_english_scale,
-            "writing_english_scale": Client.writing_english_scale,
-            "numeracy_scale": Client.numeracy_scale,
-            "computer_scale": Client.computer_scale,
-            "transportation_bool": Client.transportation_bool,
-            "caregiver_bool": Client.caregiver_bool,
-            "housing": Client.housing,
-            "income_source": Client.income_source,
-            "felony_bool": Client.felony_bool,
-            "attending_school": Client.attending_school,
-            "substance_use": Client.substance_use,
-            "time_unemployed": Client.time_unemployed,
-            "need_mental_health_support_bool": Client.need_mental_health_support_bool,
-            "current_model": Client.current_model,
-        }
-
-        for key, column in field_map.items():
-            if (val := filters.get(key)) is not None:
-                if callable(column):
-                    query = query.filter(column(val))
-                else:
-                    query = query.filter(column == val)
-
-        return query
-
-    @staticmethod
     def get_caseworker_or_404nf(db: Session, user_id: int) -> User:
         caseworker = db.query(User).filter(User.id == user_id).first()
         if not caseworker:
@@ -386,10 +322,6 @@ class ClientService:
             setattr(instance, field, value)
 
 
-"""
-# Client service module handling all database operations for clients.
-# Provides CRUD operations and business logic for client management.
-# """
 
 # from sqlalchemy.orm import Session
 # from sqlalchemy import and_

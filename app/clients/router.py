@@ -20,6 +20,7 @@ from app.clients.schema import (
     ServiceResponse,
     ServiceUpdate,
     ModelUpdate,
+    ClientFilters
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
@@ -86,8 +87,7 @@ async def get_clients_by_criteria(
 ):
     """Search clients by any combination of criteria"""
     return ClientService.get_clients_by_criteria(
-        db,
-        employment_status=employment_status,
+        db, ClientFilters(employment_status=employment_status,
         education_level=education_level,
         age_min=age_min,
         gender=gender,
@@ -111,7 +111,7 @@ async def get_clients_by_criteria(
         substance_use=substance_use,
         time_unemployed=time_unemployed,
         need_mental_health_support_bool=need_mental_health_support_bool,
-        current_model=current_model,
+        current_model=current_model)
     )
 
 
