@@ -35,15 +35,15 @@ class ClientService:
         }
 
     @staticmethod
-    def get_clients_by_criteria(db: Session, filters: ClientFilters):
-        filters = locals().copy()
-        filters.pop("db")
-
+    def get_clients_by_criteria(
+        db: Session,
+        filters: ClientFilters
+    ):
         ClientService.validate_criteria(filters)
         """Get clients filtered by any combination of criteria"""
-
+        
         try:
-            query = db.query(Client).filter(filters.build_filter())
+            query = db.query(Client).filter(*filters.build_filter())
             return query.all()
         except Exception as e:
             raise HTTPException(
@@ -270,23 +270,20 @@ class ClientService:
             )
 
     @staticmethod
-    def validate_criteria(filters: dict):
-        level = filters.get("education_level")
-        if level is not None and not (1 <= level <= 14):
+    def validate_criteria(filters: ClientFilters):
+        if (level := filters.education_level) is not None and not (
+            1 <= level <= 14
+        ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Education level must be between 1 and 14",
             )
-
-        age = filters.get("age_min")
-        if age is not None and age < 18:
+        if (age := filters.age_min) is not None and age < 18:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Minimum age must be at least 18",
             )
-
-        gender = filters.get("gender")
-        if gender is not None and gender not in [1, 2]:
+        if (gender := filters.gender) is not None and gender not in [1, 2]:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Gender must be 1 or 2",

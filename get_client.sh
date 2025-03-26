@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo 'Getting token'
+echo 'Get token'
 
 token=`curl -X POST "http://127.0.0.1:8000/auth/token" \
   -F "username=testuser" \
@@ -14,4 +14,8 @@ curl -X GET "http://127.0.0.1:8000/clients/" \
 
 echo 'Get client'
 curl -X GET "http://127.0.0.1:8000/clients/1" \
+  -H "Authorization: Bearer $token"
+
+echo 'Get clients by criteria'
+curl -X GET "http://127.0.0.1:8000/clients/search/by-criteria?age_min=26" \
   -H "Authorization: Bearer $token"

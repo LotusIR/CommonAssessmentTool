@@ -241,9 +241,8 @@ class ClientFilters:
         substance_use: Optional[bool] = None,
         time_unemployed: Optional[int] = None,
         need_mental_health_support_bool: Optional[bool] = None,
-        current_model: Optional[str] = None,
-    ):
-        field_map = {
+        current_model: Optional[str] = None):
+        self.field_map = {
             "employment_status": Client.currently_employed,
             "age_min": lambda v: Client.age >= v,
             "gender": Client.gender,
@@ -270,40 +269,40 @@ class ClientFilters:
             "need_mental_health_support_bool": Client.need_mental_health_support_bool,
             "current_model": Client.current_model,
         }
-        employment_status: Optional[bool] = employment_status
-        education_level: Optional[int] = education_level
-        age_min: Optional[int] = age_min
-        gender: Optional[int] = gender
-        work_experience: Optional[int] = work_experience
-        canada_workex: Optional[int] = canada_workex
-        dep_num: Optional[int] = dep_num
-        canada_born: Optional[bool] = canada_born
-        citizen_status: Optional[bool] = citizen_status
-        fluent_english: Optional[bool] = fluent_english
-        reading_english_scale: Optional[int] = reading_english_scale
-        speaking_english_scale: Optional[int] = speaking_english_scale
-        writing_english_scale: Optional[int] = writing_english_scale
-        numeracy_scale: Optional[int] = numeracy_scale
-        computer_scale: Optional[int] = computer_scale
-        transportation_bool: Optional[bool] = transportation_bool
-        caregiver_bool: Optional[bool] = caregiver_bool
-        housing: Optional[int] = housing
-        income_source: Optional[int] = income_source
-        felony_bool: Optional[bool] = felony_bool
-        attending_school: Optional[bool] = attending_school
-        substance_use: Optional[bool] = substance_use
-        time_unemployed: Optional[int] = time_unemployed
-        need_mental_health_support_bool: Optional[bool] = (
-            need_mental_health_support_bool
-        )
-        current_model: Optional[str] = current_model
-
+        self.employment_status: Optional[bool] = employment_status
+        self.education_level: Optional[int] = education_level
+        self.age_min: Optional[int] = age_min
+        self.gender: Optional[int] = gender
+        self.work_experience: Optional[int] = work_experience
+        self.canada_workex: Optional[int] = canada_workex
+        self.dep_num: Optional[int] = dep_num
+        self.canada_born: Optional[bool] = canada_born
+        self.citizen_status: Optional[bool] = citizen_status
+        self.fluent_english: Optional[bool] = fluent_english
+        self.reading_english_scale: Optional[int] = reading_english_scale
+        self.speaking_english_scale: Optional[int] = speaking_english_scale
+        self.writing_english_scale: Optional[int] = writing_english_scale
+        self.numeracy_scale: Optional[int] = numeracy_scale
+        self.computer_scale: Optional[int] = computer_scale
+        self.transportation_bool: Optional[bool] = transportation_bool
+        self.caregiver_bool: Optional[bool] = caregiver_bool
+        self.housing: Optional[int] = housing
+        self.income_source: Optional[int] = income_source
+        self.felony_bool: Optional[bool] = felony_bool
+        self.attending_school: Optional[bool] = attending_school
+        self.substance_use: Optional[bool] = substance_use
+        self.time_unemployed: Optional[int] = time_unemployed
+        self.need_mental_health_support_bool: Optional[bool] = need_mental_health_support_bool
+        self.current_model: Optional[str] = current_model
+    
     def build_filter(self):
         filter = []
-        for key, value in self.field_map:
-            if not hasattr(self, key):
+        for key, value in self.field_map.items():
+            if not hasattr(self, key) or getattr(self, key) is None:
                 continue
             if callable(value):
                 filter.append(value(getattr(self, key)))
             else:
                 filter.append(value == getattr(self, key))
+        return filter
+        
