@@ -15,7 +15,7 @@ def initialize_database():
                 username="admin",
                 email="admin@example.com",
                 hashed_password=get_password_hash("admin123"),
-                role=UserRole.admin
+                role=UserRole.ADMIN
             )
             db.add(admin_user)
             db.commit()
@@ -30,7 +30,7 @@ def initialize_database():
                 username="case_worker1",
                 email="caseworker1@example.com",
                 hashed_password=get_password_hash("worker123"),
-                role=UserRole.case_worker
+                role=UserRole.CASE_WORKER
             )
             db.add(case_worker)
             db.commit()

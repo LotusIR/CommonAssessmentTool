@@ -8,7 +8,13 @@ from sqlalchemy import and_
 from fastapi import HTTPException, status
 from typing import List, Optional, Dict, Any
 from app.models import Client, ClientCase, User
-from app.clients.schema import ClientUpdate, ServiceUpdate, ServiceResponse, ModelUpdate
+from app.clients.schema import (
+    ClientUpdate,
+    ServiceUpdate,
+    ServiceResponse,
+    ClientCreate,
+    ModelUpdate,
+)
 
 
 class ClientService:
@@ -300,6 +306,24 @@ class ClientService:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Limit must be greater than 0",
+            )
+
+    @staticmethod
+    def create_client(db: Session, client_create: ClientCreate):
+        client = Client()
+        update_data = client_create.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(client, field, value)
+        try:
+            db.add(client)
+            db.commit()
+            db.refresh(client)
+            return client
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Failed to create client: {str(e)}",
             )
 
     @staticmethod
