@@ -20,7 +20,7 @@ class UserCreate(BaseModel):
 
     @validator("role")
     def validate_role(cls, v):
-        if v not in [UserRole.admin, UserRole.case_worker]:
+        if v not in [UserRole.ADMIN, UserRole.CASE_WORKER]:
             raise ValueError("Role must be either admin or case_worker")
         return v
 
@@ -92,7 +92,7 @@ async def get_current_user(
 
 
 def get_admin_user(current_user: User = Depends(get_current_user)):
-    if current_user.role != UserRole.admin:
+    if current_user.role != UserRole.ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only admin users can perform this operation",
