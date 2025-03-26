@@ -36,6 +36,14 @@ async def get_clients(
     return ClientService.get_clients(db, skip, limit)
 
 
+@router.get("/models", summary="List all available ML models")
+async def list_available_models():
+    """
+    API endpoint to return the list of available ML models.
+    """
+    return {"available_models": get_available_models()}
+
+
 @router.get("/{client_id}", response_model=ClientResponse)
 async def get_client(
     client_id: int,
@@ -207,15 +215,7 @@ async def delete_client(
     return None
 
 
-@router.get("/models", summary="List all available ML models")
-async def list_available_models():
-    """
-    API endpoint to return the list of available ML models.
-    """
-    return {"available_models": get_available_models()}
-
-
-@router.get("/model/{client_id}", summary="Show the ML model used by the user")
+@router.get("/{client_id}/model", summary="Show the ML model used by the user")
 async def get_current_model(
     client_id: int,
     db: Session = Depends(get_db),
@@ -226,8 +226,8 @@ async def get_current_model(
     return ClientService.get_current_model(db, client_id)
 
 
-@router.put("{client_id}/model", summary="Change the ML model used by the user")
-async def get_current_model(
+@router.put("/{client_id}/model", summary="Change the ML model used by the user")
+async def set_current_model(
     client_id: int,
     data: ModelUpdate,
     db: Session = Depends(get_db),
