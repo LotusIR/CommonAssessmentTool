@@ -35,13 +35,10 @@ class ClientService:
         }
 
     @staticmethod
-    def get_clients_by_criteria(
-        db: Session,
-        filters: ClientFilters
-    ):
+    def get_clients_by_criteria(db: Session, filters: ClientFilters):
         ClientService.validate_criteria(filters)
         """Get clients filtered by any combination of criteria"""
-        
+
         try:
             query = db.query(Client).filter(*filters.build_filter())
             return query.all()
@@ -271,9 +268,7 @@ class ClientService:
 
     @staticmethod
     def validate_criteria(filters: ClientFilters):
-        if (level := filters.education_level) is not None and not (
-            1 <= level <= 14
-        ):
+        if (level := filters.education_level) is not None and not (1 <= level <= 14):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Education level must be between 1 and 14",

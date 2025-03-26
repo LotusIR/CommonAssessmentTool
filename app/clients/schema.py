@@ -241,7 +241,8 @@ class ClientFilters:
         substance_use: Optional[bool] = None,
         time_unemployed: Optional[int] = None,
         need_mental_health_support_bool: Optional[bool] = None,
-        current_model: Optional[str] = None):
+        current_model: Optional[str] = None,
+    ):
         self.field_map = {
             "employment_status": Client.currently_employed,
             "age_min": lambda v: Client.age >= v,
@@ -292,9 +293,11 @@ class ClientFilters:
         self.attending_school: Optional[bool] = attending_school
         self.substance_use: Optional[bool] = substance_use
         self.time_unemployed: Optional[int] = time_unemployed
-        self.need_mental_health_support_bool: Optional[bool] = need_mental_health_support_bool
+        self.need_mental_health_support_bool: Optional[bool] = (
+            need_mental_health_support_bool
+        )
         self.current_model: Optional[str] = current_model
-    
+
     def build_filter(self):
         filter = []
         for key, value in self.field_map.items():
@@ -305,4 +308,3 @@ class ClientFilters:
             else:
                 filter.append(value == getattr(self, key))
         return filter
-        
