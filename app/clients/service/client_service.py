@@ -300,19 +300,22 @@ class ClientService:
 
     @staticmethod
     def validate_criteria(filters: dict):
-        if (level := filters.get("education_level")) is not None and not (
-            1 <= level <= 14
-        ):
+        level = filters.get("education_level")
+        if level is not None and not (1 <= level <= 14):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Education level must be between 1 and 14",
             )
-        if (age := filters.get("age_min")) is not None and age < 18:
+
+        age = filters.get("age_min")
+        if age is not None and age < 18:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Minimum age must be at least 18",
             )
-        if (gender := filters.get("gender")) is not None and gender not in [1, 2]:
+
+        gender = filters.get("gender")
+        if gender is not None and gender not in [1, 2]:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Gender must be 1 or 2",
@@ -386,10 +389,10 @@ class ClientService:
             setattr(instance, field, value)
 
 
-"""
-# Client service module handling all database operations for clients.
-# Provides CRUD operations and business logic for client management.
 # """
+# # Client service module handling all database operations for clients.
+# # Provides CRUD operations and business logic for client management.
+# # """
 
 # from sqlalchemy.orm import Session
 # from sqlalchemy import and_
