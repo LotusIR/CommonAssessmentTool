@@ -13,9 +13,8 @@ from app.clients.schema import (
     ServiceUpdate,
     ServiceResponse,
     ClientCreate,
-    ModelUpdate
+    ModelUpdate,
 )
-
 
 
 class ClientService:
@@ -326,7 +325,6 @@ class ClientService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to create client: {str(e)}",
             )
-        
 
     @staticmethod
     def validate_criteria(filters: dict):
