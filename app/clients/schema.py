@@ -213,8 +213,11 @@ class ClientListResponse(BaseModel):
     clients: List[ClientResponse]
     total: int
 
+
 class ClientFilters:
-    def __init__(self, employment_status: Optional[bool] = None,
+    def __init__(
+        self,
+        employment_status: Optional[bool] = None,
         education_level: Optional[int] = None,
         age_min: Optional[int] = None,
         gender: Optional[int] = None,
@@ -238,7 +241,8 @@ class ClientFilters:
         substance_use: Optional[bool] = None,
         time_unemployed: Optional[int] = None,
         need_mental_health_support_bool: Optional[bool] = None,
-        current_model: Optional[str] = None):
+        current_model: Optional[str] = None,
+    ):
         field_map = {
             "employment_status": Client.currently_employed,
             "age_min": lambda v: Client.age >= v,
@@ -289,9 +293,11 @@ class ClientFilters:
         attending_school: Optional[bool] = attending_school
         substance_use: Optional[bool] = substance_use
         time_unemployed: Optional[int] = time_unemployed
-        need_mental_health_support_bool: Optional[bool] = need_mental_health_support_bool
+        need_mental_health_support_bool: Optional[bool] = (
+            need_mental_health_support_bool
+        )
         current_model: Optional[str] = current_model
-    
+
     def build_filter(self):
         filter = []
         for key, value in self.field_map:
@@ -301,5 +307,3 @@ class ClientFilters:
                 filter.append(value(getattr(self, key)))
             else:
                 filter.append(value == getattr(self, key))
-
-        

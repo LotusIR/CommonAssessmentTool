@@ -12,7 +12,7 @@ from app.clients.schema import (
     ServiceUpdate,
     ClientCreate,
     ModelUpdate,
-    ClientFilters
+    ClientFilters,
 )
 
 
@@ -35,16 +35,12 @@ class ClientService:
         }
 
     @staticmethod
-    def get_clients_by_criteria(
-        db: Session,
-        filters: ClientFilters
-    ):
+    def get_clients_by_criteria(db: Session, filters: ClientFilters):
         filters = locals().copy()
         filters.pop("db")
 
         ClientService.validate_criteria(filters)
         """Get clients filtered by any combination of criteria"""
-        
 
         try:
             query = db.query(Client).filter(filters.build_filter())
@@ -323,7 +319,6 @@ class ClientService:
     def update_model_instance(instance, update_data: dict):
         for field, value in update_data.items():
             setattr(instance, field, value)
-
 
 
 # from sqlalchemy.orm import Session

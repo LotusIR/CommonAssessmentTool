@@ -20,7 +20,7 @@ from app.clients.schema import (
     ServiceResponse,
     ServiceUpdate,
     ModelUpdate,
-    ClientFilters
+    ClientFilters,
 )
 
 router = APIRouter(prefix="/clients", tags=["clients"])
@@ -87,31 +87,34 @@ async def get_clients_by_criteria(
 ):
     """Search clients by any combination of criteria"""
     return ClientService.get_clients_by_criteria(
-        db, ClientFilters(employment_status=employment_status,
-        education_level=education_level,
-        age_min=age_min,
-        gender=gender,
-        work_experience=work_experience,
-        canada_workex=canada_workex,
-        dep_num=dep_num,
-        canada_born=canada_born,
-        citizen_status=citizen_status,
-        fluent_english=fluent_english,
-        reading_english_scale=reading_english_scale,
-        speaking_english_scale=speaking_english_scale,
-        writing_english_scale=writing_english_scale,
-        numeracy_scale=numeracy_scale,
-        computer_scale=computer_scale,
-        transportation_bool=transportation_bool,
-        caregiver_bool=caregiver_bool,
-        housing=housing,
-        income_source=income_source,
-        felony_bool=felony_bool,
-        attending_school=attending_school,
-        substance_use=substance_use,
-        time_unemployed=time_unemployed,
-        need_mental_health_support_bool=need_mental_health_support_bool,
-        current_model=current_model)
+        db,
+        ClientFilters(
+            employment_status=employment_status,
+            education_level=education_level,
+            age_min=age_min,
+            gender=gender,
+            work_experience=work_experience,
+            canada_workex=canada_workex,
+            dep_num=dep_num,
+            canada_born=canada_born,
+            citizen_status=citizen_status,
+            fluent_english=fluent_english,
+            reading_english_scale=reading_english_scale,
+            speaking_english_scale=speaking_english_scale,
+            writing_english_scale=writing_english_scale,
+            numeracy_scale=numeracy_scale,
+            computer_scale=computer_scale,
+            transportation_bool=transportation_bool,
+            caregiver_bool=caregiver_bool,
+            housing=housing,
+            income_source=income_source,
+            felony_bool=felony_bool,
+            attending_school=attending_school,
+            substance_use=substance_use,
+            time_unemployed=time_unemployed,
+            need_mental_health_support_bool=need_mental_health_support_bool,
+            current_model=current_model,
+        ),
     )
 
 
