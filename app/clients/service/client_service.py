@@ -268,34 +268,6 @@ class ClientService:
         return client
 
     @staticmethod
-    def get_caseworker_or_404nf(db: Session, user_id: int) -> User:
-        user = db.query(User).filter(User.id == user_id).first()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Case worker with id {case_worker_id} not found",
-            )
-        return user
-
-    @staticmethod
-    def get_case_or_404nf(db: Session, client_id: int, user_id: int) -> ClientCase:
-        case = (
-            db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
-        )
-        if not case:
-            raise HTTPException(
-                status_code=HTTP_404_NOT_FOUND,
-                detail=f"No case for client {client_id} with worker {user_id}. "
-                f"Cannot update services for a non-existent case assignment.",
-            )
-        return case
-
-    @staticmethod
-    def update_model_instance(instance, update_data: dict):
-        for field, value in update_data.items():
-            setattr(instance, field, value)
-
-    @staticmethod
     def validate_pagination(skip: int, limit: int):
         if skip < 0:
             raise HTTPException(
@@ -385,8 +357,36 @@ class ClientService:
 
         return query
 
+    @staticmethod
+    def get_caseworker_or_404nf(db: Session, user_id: int) -> User:
+        caseworker = db.query(User).filter(User.id == user_id).first()
+        if not caseworker:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Case worker with id {user_id} not found",
+            )
+        return caseworker
 
-# """
+    @staticmethod
+    def get_case_or_404nf(db: Session, client_id: int, user_id: int) -> ClientCase:
+        case = (
+            db.query(ClientCase).filter_by(client_id=client_id, user_id=user_id).first()
+        )
+        if not case:
+            raise HTTPException(
+                status_code=HTTP_404_NOT_FOUND,
+                detail=f"No case for client {client_id} with worker {user_id}. "
+                f"Cannot update services for a non-existent case assignment.",
+            )
+        return case
+
+    @staticmethod
+    def update_model_instance(instance, update_data: dict):
+        for field, value in update_data.items():
+            setattr(instance, field, value)
+
+
+"""
 # Client service module handling all database operations for clients.
 # Provides CRUD operations and business logic for client management.
 # """
