@@ -248,11 +248,11 @@ class ClientService:
 
     @staticmethod
     def get_caseworker_or_404nf(db: Session, user_id: int) -> User:
-        caseworker = db.query(User).filter(User.id == caseworker_id).first()
+        caseworker = db.query(User).filter(User.id == user_id).first()
         if not caseworker:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Case worker with id {case_worker_id} not found",
+                detail=f"Case worker with id {user_id} not found",
             )
         return caseworker
 
