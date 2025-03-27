@@ -46,7 +46,38 @@ class PredictionInput(BaseModel):
     substance_use: str
     time_unemployed: int
     need_mental_health_support_bool: str
-    current_model: str
+
+    @classmethod
+    def from_client_response(cls, client):
+        def bool_to_str(val: bool) -> str:
+            return "1" if val else "0"
+        
+        return cls(
+            age=client.age,
+            gender=bool_to_str(client.gender),
+            work_experience=client.work_experience,
+            canada_workex=client.canada_workex,
+            dep_num=client.dep_num,
+            canada_born=bool_to_str(client.canada_born),
+            citizen_status=bool_to_str(client.citizen_status),
+            level_of_schooling=str(client.level_of_schooling),
+            fluent_english=bool_to_str(client.fluent_english),
+            reading_english_scale=client.reading_english_scale,
+            speaking_english_scale=client.speaking_english_scale,
+            writing_english_scale=client.writing_english_scale,
+            numeracy_scale=client.numeracy_scale,
+            computer_scale=client.computer_scale,
+            transportation_bool=bool_to_str(client.transportation_bool),
+            caregiver_bool=bool_to_str(client.caregiver_bool),
+            housing=str(client.housing),
+            income_source=str(client.income_source),
+            felony_bool=bool_to_str(client.felony_bool),
+            attending_school=bool_to_str(client.attending_school),
+            currently_employed=bool_to_str(client.currently_employed),
+            substance_use=bool_to_str(client.substance_use),
+            time_unemployed=client.time_unemployed,
+            need_mental_health_support_bool=bool_to_str(client.need_mental_health_support_bool),
+        )
 
 
 class ClientBase(BaseModel):
