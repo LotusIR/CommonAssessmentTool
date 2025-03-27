@@ -22,6 +22,8 @@ from app.clients.schema import (
     ModelUpdate,
     ClientFilters,
 )
+from app.clients.service.logic import interpret_and_calculate
+from app.clients.schema import PredictionInput
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
@@ -252,3 +254,17 @@ async def set_current_model(
     API endpoint to change the currently using ML model.
     """
     return ClientService.set_model(db, client_id, data)
+
+
+@router.post("/{client_id}/predictions")
+async def predict(
+    client_id: int,
+    db: Session = Depends(get_db),
+):
+    client = ClientService.get_client(db, client_id)
+    client_response = ClientResponse.model_validate(client)
+
+    prediction_input = PredictionInput.from_client_response(client_response)
+    return interpret_and_calculate(
+        prediction_input.model_dump(), client_response.current_model
+    )

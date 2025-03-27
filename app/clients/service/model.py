@@ -79,7 +79,6 @@ def prepare_models(model_name):
         "substance_use",  # Substance use disorder (bool)
         "time_unemployed",  # Years unemployed
         "need_mental_health_support_bool",  # Needs mental health support (bool)
-        "current_model",  # The currently using ML model (string)
     ]
     # Define intervention columns
     intervention_columns = [
