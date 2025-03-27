@@ -255,6 +255,7 @@ async def set_current_model(
     """
     return ClientService.set_model(db, client_id, data)
 
+
 @router.post("/{client_id}/predictions")
 async def predict(
     client_id: int,
@@ -264,4 +265,6 @@ async def predict(
     client_response = ClientResponse.model_validate(client)
 
     prediction_input = PredictionInput.from_client_response(client_response)
-    return interpret_and_calculate(prediction_input.model_dump(), client_response.current_model)
+    return interpret_and_calculate(
+        prediction_input.model_dump(), client_response.current_model
+    )

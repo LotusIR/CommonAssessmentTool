@@ -51,7 +51,7 @@ class PredictionInput(BaseModel):
     def from_client_response(cls, client):
         def bool_to_str(val: bool) -> str:
             return "1" if val else "0"
-        
+
         return cls(
             age=client.age,
             gender=bool_to_str(client.gender),
@@ -76,7 +76,9 @@ class PredictionInput(BaseModel):
             currently_employed=bool_to_str(client.currently_employed),
             substance_use=bool_to_str(client.substance_use),
             time_unemployed=client.time_unemployed,
-            need_mental_health_support_bool=bool_to_str(client.need_mental_health_support_bool),
+            need_mental_health_support_bool=bool_to_str(
+                client.need_mental_health_support_bool
+            ),
         )
 
 
