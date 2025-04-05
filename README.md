@@ -55,3 +55,62 @@ This also has an API file to interact with the front end, and logic in order to 
 
 -Create case assignment (Allow authorized users to create a new case assignment.)
 
+
+## Running the Backend with Docker
+
+Follow the steps below to build and run the backend application using Docker.
+
+### 1. Build the Docker Image
+
+Open terminal in the project root (where the `Dockerfile` is located), and run:
+
+```bash
+docker build -t common-assessment-tool:v1 .
+```
+
+This command builds the Docker image and tags it as `common-assessment-tool:v1`.
+
+---
+
+### 2. Run the Docker Container
+
+To run the application in a container and expose it on port `8000`, use:
+
+```bash
+docker run -d -p 8000:8000 --name app-container common-assessment-tool:v1
+```
+
+- `-d`: Runs the container in detached mode (in the background).
+- `-p 8000:8000`: Maps port 8000 inside the container to port 8000 on your host.
+- `--name app-container`: Names the container for easy reference.
+
+---
+
+### 3. Manage the Container
+
+To stop the container:
+
+```bash
+docker stop app-container
+```
+
+To start it again:
+
+```bash
+docker start app-container
+```
+
+To view the logs:
+
+```bash
+docker logs app-container
+```
+
+---
+
+## Notes
+
+- Be sure to stop the container when you're done to free up system resources.
+- The container exposes port `8000`, so avoid conflicts with other services on that port.
+
+---
