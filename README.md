@@ -108,6 +108,40 @@ docker logs app-container
 
 ---
 
+## Alternative: Running with Docker Compose
+
+This project also supports Docker Compose, which is a convenient tool that acts as a wrapper around standard Docker commands. It simplifies managing containers by allowing you to start, stop, and restart services with a single command.
+
+### 4. Using `docker-compose.yml`
+
+The project includes a `docker-compose.yml` file for easier setup and execution. To use it:
+
+1. Make sure Docker Compose is installed.
+2. In the project root directory, run:
+
+```bash
+docker compose up -d
+```
+
+This command builds (if needed) and starts the container in detached mode.
+
+To stop the container:
+
+```bash
+docker compose down
+```
+
+To restart:
+
+```bash
+docker compose restart
+```
+
+> Docker Compose automatically uses the configurations defined in `docker-compose.yml`.
+
+---
+
+
 ## Notes
 
 - Be sure to stop the container when you're done to free up system resources.
