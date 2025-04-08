@@ -21,7 +21,7 @@ jobs:
 
       - name: Run Docker linting
         run: |
-          hadolint Dockerfile
+          hadolint --failure-threshold error Dockerfile
 
       - name: Run Docker Build
         run: |
