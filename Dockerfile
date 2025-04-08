@@ -10,7 +10,7 @@ COPY ./requirements.txt /code/requirements.txt
 # Install required packages
 RUN pip install --no-cache-dir -r /code/requirements.txt \
     && apt-get update \
-    && apt-get install -y jq=1.6-1ubuntu0.20.04.1
+    && apt-get install -y jq
 
 # Copy the rest of your application
 COPY . /code/

@@ -31,15 +31,15 @@ jobs:
         run: |
           docker run -d -p 8000:8000 myapp:latest
           sleep 10
-          wget --quiet --tries=1 --spider http://localhost:8000/health || (echo "Health check failed" && exit 1)
+          curl -s -f http://localhost:8000/health || (echo "Health check failed" && exit 1)
 
       - name: Print Success Message
         run: |
           echo "CI Pipeline completed successfully!"
           echo "========================"
           echo "✓ Code checked out"
-          echo "✓ Python environment set up"
-          echo "✓ Dependencies installed"
-          echo "✓ Tests executed"
-          echo "✓ Linting completed"
+          echo "✓ Docker Linting completed"
+          echo "✓ Docker Build completed"
+          echo "✓ Docker Container started"
+          echo "✓ Health check passed"
           echo "========================"
