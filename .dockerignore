@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+
+# Env
+.env
+
+# Virtual environments
+venv/
+.venv/
+
+# Git
+.git
+.gitignore
+
+# Editors
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore specific sprint notes
+Sprint_1.txt
+Sprint_2.txt
+Sprint_3.txt
+
+# Project-specific
+tests/
+.dockerignore
