@@ -32,6 +32,7 @@ app.include_router(clients_router)
 async def health():
     return {"status": "ok"}
 
+
 @app.on_event("startup")
 async def run_script_once():
     marker_file = "/code/.data_init"
@@ -40,6 +41,7 @@ async def run_script_once():
         subprocess.Popen(["python", "initialize_data.py"])
         with open(marker_file, "w") as f:
             f.write("done")
+
 
 # Configure CORS middleware
 app.add_middleware(
