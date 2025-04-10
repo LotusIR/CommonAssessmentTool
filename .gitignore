@@ -32,3 +32,6 @@ htmlcov/
 .tox/
 .coverage
 .coverage.*.env
+
+# database start up
+.data_init
