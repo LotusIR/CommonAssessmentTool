@@ -1,4 +1,4 @@
-Team TicTech 
+<!-- Team TicTech 
 
 Project -- Feature Development Backend: Create CRUD API's for Client
 
@@ -53,10 +53,103 @@ This also has an API file to interact with the front end, and logic in order to 
 
 -Update client services (Allow users to update the service status of a case.)
 
--Create case assignment (Allow authorized users to create a new case assignment.)
+-Create case assignment (Allow authorized users to create a new case assignment.) -->
+
+# Team TicTech
+
+## Project: Feature Development Backend: Create CRUD API's for Client
+
+### User Story
+
+As a user of the backend API's, I want to call API's that can retrieve, update, and delete information of clients who have already registered with the CaseManagment service so that I more efficiently help previous clients make better decisions on how to be gainfully employed.
+
+### Acceptance Criteria
+
+- Provide REST API endpoints so that the Frontend can use them to get information on an existing client.
+- Document how to use the REST API
+- Choose and create a database to hold client information
+- Add tests
+
+---
+
+## Overview
+
+This will contain the model used for the project that based on the input information will give the social workers the clients baseline level of success and what their success will be after certain interventions.
+
+The model works off of dummy data of several combinations of clients alongside the interventions chosen for them as well as their success rate at finding a job afterward. The model will be updated by the case workers by inputing new data for clients with their updated outcome information, and it can be updated on a daily, weekly, or monthly basis.
+
+This also has an API file to interact with the front end, and logic in order to process the interventions coming from the front end. This includes functions to clean data, create a matrix of all possible combinations in order to get the ones with the highest increase of success, and output the results in a way the front end can interact with.
+
+---
+
+## Local Deployment
+
+1. Create and activate a virtual environment.
+2. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the app:
+
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+4. Load initial data:
+
+   ```bash
+   python initialize_data.py
+   ```
+
+5. Open your browser at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) to access Swagger UI.
+
+6. Log in as admin:
+   - Username: `admin`
+   - Password: `admin123`
+
+7. Available Endpoints:
+
+- Create User (Only users in admin role can create new users. The role field needs to be either "admin" or "case_worker")
+
+- Get clients (Display all the clients that are in the database)
+
+- Get client (Allow authorized users to search for a client by id. If the id is not in database, an error message will show.)
+
+- Update client (Allow authorized users to update a client's basic info by inputting in client_id and providing updated values.)
+
+- Delete client (Allow authorized users to delete a client by id. If an id is no longer in the database, an error message will show.)
+
+- Get clients by criteria (Allow authorized users to get a list of clients who meet a certain combination of criteria.)
+
+- Get Clients by services (Allow authorized users to get a list of clients who meet a certain combination of service statuses.)
+
+- Get clients services (Allow authorized users to view a client's services' status.)
+
+- Get clients by success rate (Allow authorized users to search for clients whose cases have a success rate beyond a certain number.)
+
+- Get clients by case worker (Allow users to view which clients are assigned to a specific case worker.)
+
+- Update client services (Allow users to update the service status of a case.)
+
+- Create case assignment (Allow authorized users to create a new case assignment.)
+
+---
+
+## Public URL (AWS Deployment)
+
+We've deployed to AWS, access Swagger UI at:
 
 
-## Running the Backend with Docker
+[Public URL](http://ec2-3-141-168-148.us-east-2.compute.amazonaws.com:8000/docs)
+
+
+Use this interactive interface to test endpoints and explore the API functionality. (the same as local deployment)
+
+---
+
+## Running with Docker
 
 Follow the steps below to build and run the backend application using Docker.
 
