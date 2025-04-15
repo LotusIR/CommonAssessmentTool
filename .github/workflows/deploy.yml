@@ -23,3 +23,8 @@ jobs:
             ls -l restart.sh
             sudo chmod +x restart.sh
             ./restart.sh
+      - name: Post-deploy curl check
+        run: |
+          echo "Waiting for server to start..."
+          sleep 10
+          curl --fail http://ec2-3-141-168-148.us-east-2.compute.amazonaws.com:8000/health
