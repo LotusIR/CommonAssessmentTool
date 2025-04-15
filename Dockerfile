@@ -7,6 +7,9 @@ WORKDIR /code
 # Copy requirements first to leverage Docker cache
 COPY ./requirements.txt /code/requirements.txt
 
+# Copy restart.sh into the container
+COPY ./restart.sh /code/restart.sh
+
 # Install required packages
 RUN pip install --no-cache-dir -r /code/requirements.txt \
     && apt-get update \
