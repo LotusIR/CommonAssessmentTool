@@ -18,5 +18,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /CommonAssessmentTool
+            git pull
             chmod +x restart.sh
             ./restart.sh
