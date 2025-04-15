@@ -30,7 +30,7 @@ app.include_router(clients_router)
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    return {"status": "ok", "message": "cd"}
 
 
 @app.on_event("startup")
